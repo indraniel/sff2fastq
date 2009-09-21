@@ -7,18 +7,26 @@
 extern "C" {
 #endif
 
+#define SFF_MAGIC   0x2e736666 /* ".sff" */
+#define SFF_VERSION "\0\0\0\1"
+#define SFF_VERSION_LENGTH 4
+#define PADDING_SIZE 8
+
 /* This is the overall sff header file */
 
 typedef struct {
     uint32_t  magic;
-    uint32_t  version;
+    char      version[4];
     uint64_t  index_offset;
     uint32_t  index_len;
     uint32_t  nreads;
+    uint16_t  header_len;
+    uint16_t  key_len;
+    uint16_t  flow_len;
+    uint8_t   flowgram_format;
+    char     *flow;
+    char     *key;
 } sff_common_header;
-
-#define SFF_MAGIC   0x2e736666 /* ".sff" */
-#define SFF_VERSION "\0\0\0\1"
 
 /*
  * There is a read_header per "reading" in the SFF archive.
@@ -47,7 +55,19 @@ typedef struct {
 } sff_read_data;
 
 /* function to read the sff file */
-sff_common_header * read_sff_common_header(const char *sff_file);
+void read_sff_common_header(FILE *fp, sff_common_header *h);
+void free_sff_common_header(sff_common_header *h);
+void verify_sff_common_header(char *prg_name, 
+                              char *prg_version, 
+                              sff_common_header *h);
+void read_padding(FILE *fp, int header_size);
+void read_sff_read_header(FILE *fp, sff_read_header *rh);
+void read_sff_read_data(FILE *fp, 
+                   sff_read_data *rd, 
+                   uint16_t nflows, 
+                   uint32_t nbases);
+void free_sff_read_header(sff_read_header *rh);
+void free_sff_read_data(sff_read_data *d);
 
 
 #ifdef __cplusplus
