@@ -1,6 +1,7 @@
 /* I N C L U D E S ***********************************************************/
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "sff.h"
 
 /* P R O T O T Y P E S *******************************************************/
@@ -58,12 +59,55 @@ process_sff_to_fastq(char *sff_file, char *fastq_file) {
 
     printf("Found %d reads to process\n", h.nreads);
 
-    register int i;
+    char *name;
+    char *bases;
+    register int i, j;
+    uint8_t quality_char;
     int numreads = (int) h.nreads;
     for (i = 0; i < numreads; i++) {
         read_sff_read_header(sff_fp, &rh);
         read_sff_read_data(sff_fp, &rd, h.flow_len, rh.nbases);
 //        construct_fastq_entry(fastq_fp, &rh, &rd, &h);
+
+        /* create bases string */
+        int bases_length = (int) rh.nbases + 1; // account for NULL termination
+        bases = (char *) malloc( bases_length * sizeof(char) );
+        if (!bases) {
+            printf("Out of memory! For bases string!\n");
+            exit(1);
+        }
+        memset(bases, '\0', (size_t) bases_length);
+        strncpy(bases, rd.bases, (size_t) rh.nbases);
+
+        /* create read name string */
+        int name_length = (int) rh.name_len + 1; // account for NULL termination
+        name = (char *) malloc( bases_length * sizeof(char) );
+        if (!name) {
+            printf("Out of memory! For name string!\n");
+            exit(1);
+        }
+        memset(name, '\0', (size_t) name_length);
+        strncpy(name, rh.name, (size_t) rh.name_len);
+
+        printf("[%d | %d] %s\n%s\n", (i+1), numreads, name, bases);
+
+        /* print out quality values (as integer) */
+        for (j = 0; j < rh.nbases; j++) {
+            printf("%d ", (int) rd.quality[j] );
+        }
+        printf("\n");
+
+        /* print out quality values (as characters) 
+         * formula taken from http://maq.sourceforge.net/fastq.shtml */
+        for (j = 0; j < rh.nbases; j++) {
+            quality_char = (rd.quality[j] <= 93 ? rd.quality[j] : 93) + 33;
+            printf("%c ", (char) quality_char );
+        }
+        printf("\n");
+
+
+        free(name);
+        free(bases);
         free_sff_read_header(&rh);
         free_sff_read_data(&rd);
     }

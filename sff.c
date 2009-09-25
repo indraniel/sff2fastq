@@ -1,7 +1,7 @@
 /* I N C L U D E S ***********************************************************/
 #include <stdio.h>
 #include <stdlib.h>
-#include <endian.h>
+#include "endian.h"
 #include "sff.h"
 
 /* F U N C T I O N S *********************************************************/
@@ -37,7 +37,7 @@ read_sff_common_header(FILE *fp, sff_common_header *h) {
         exit(1);
     }
 
-    key  = (char *) malloc( h->key_len  * sizeof(char) );
+    key  = (char *) malloc( h->key_len * sizeof(char) );
     if (!key) {
         printf("Out of memory! Could not allocate header key string!\n");
         exit(1);
@@ -74,10 +74,10 @@ read_sff_common_header(FILE *fp, sff_common_header *h) {
 void
 read_padding(FILE *fp, int header_size) {
     int remainder = PADDING_SIZE - (header_size % PADDING_SIZE);
-    printf("There is a %d byte padding in the common header\n", remainder);
+//    printf("There is a %d byte padding in the common header\n", remainder);
     uint8_t padding[remainder];
     fread(padding, sizeof(uint8_t), remainder, fp);
-    printf("padding: %s\n", padding);
+//    printf("padding: %s\n", padding);
 }
 
 void
@@ -171,7 +171,7 @@ read_sff_read_header(FILE *fp, sff_read_header *rh) {
                   + sizeof(rh->clip_adapter_right)
                   + (sizeof(char) * rh->name_len);
 
-    printf("The read header size is currently %d bytes\n", header_size);
+//    printf("The read header size is currently %d bytes\n", header_size);
 
     if ( !(header_size % PADDING_SIZE == 0) ) {
         read_padding(fp, header_size);
@@ -247,7 +247,7 @@ read_sff_read_data(FILE *fp,
                 + (sizeof(uint8_t) * nbases);  // quality size
                   
 
-    printf("The read data size is currently %d bytes\n", data_size);
+//    printf("The read data size is currently %d bytes\n", data_size);
 
     if ( !(data_size % PADDING_SIZE == 0) ) {
         read_padding(fp, data_size);
