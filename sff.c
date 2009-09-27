@@ -1,7 +1,6 @@
 /* I N C L U D E S ***********************************************************/
 #include <stdio.h>
 #include <stdlib.h>
-#include "endian.h"
 #include "sff.h"
 
 /* F U N C T I O N S *********************************************************/

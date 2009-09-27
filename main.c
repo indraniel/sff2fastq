@@ -6,7 +6,11 @@
 
 /* P R O T O T Y P E S *******************************************************/
 void process_sff_to_fastq(char *sff_file, char *fastq_file);
-void construct_fastq_entry(FILE *fp, sff_read_header *rh, sff_read_data *rd);
+void construct_fastq_entry(FILE *fp,
+                           char *name,
+                           char *bases,
+                           uint8_t *quality,
+                           uint32_t nbases);
 
 /* G L O B A L S *************************************************************/
 char prg_version[]  = "0.01";
@@ -15,7 +19,7 @@ char prg_name[] = "sff2fastq";
 /* M A I N *******************************************************************/
 int main(int argc, char *argv[]) {
     sff_common_header *h;
-    char fastq_file[] = "test.fastq";
+    char fastq_file[] = "/tmp/test.fastq";
 
     printf("sff file : %s\n", argv[1]);
     process_sff_to_fastq(argv[1], fastq_file);
@@ -61,13 +65,11 @@ process_sff_to_fastq(char *sff_file, char *fastq_file) {
 
     char *name;
     char *bases;
-    register int i, j;
-    uint8_t quality_char;
+    register int i;
     int numreads = (int) h.nreads;
     for (i = 0; i < numreads; i++) {
         read_sff_read_header(sff_fp, &rh);
         read_sff_read_data(sff_fp, &rd, h.flow_len, rh.nbases);
-//        construct_fastq_entry(fastq_fp, &rh, &rd, &h);
 
         /* create bases string */
         int bases_length = (int) rh.nbases + 1; // account for NULL termination
@@ -89,22 +91,9 @@ process_sff_to_fastq(char *sff_file, char *fastq_file) {
         memset(name, '\0', (size_t) name_length);
         strncpy(name, rh.name, (size_t) rh.name_len);
 
-        printf("[%d | %d] %s\n%s\n", (i+1), numreads, name, bases);
+        printf("[%d | %d] %s\n", (i+1), numreads, name);
 
-        /* print out quality values (as integer) */
-        for (j = 0; j < rh.nbases; j++) {
-            printf("%d ", (int) rd.quality[j] );
-        }
-        printf("\n");
-
-        /* print out quality values (as characters) 
-         * formula taken from http://maq.sourceforge.net/fastq.shtml */
-        for (j = 0; j < rh.nbases; j++) {
-            quality_char = (rd.quality[j] <= 93 ? rd.quality[j] : 93) + 33;
-            printf("%c ", (char) quality_char );
-        }
-        printf("\n");
-
+        construct_fastq_entry(fastq_fp, name, bases, rd.quality, rh.nbases);
 
         free(name);
         free(bases);
@@ -116,3 +105,31 @@ process_sff_to_fastq(char *sff_file, char *fastq_file) {
     fclose(fastq_fp);
     fclose(sff_fp);
 }
+
+void construct_fastq_entry(FILE *fp,
+                           char *name,
+                           char *bases,
+                           uint8_t *quality,
+                           uint32_t nbases) {
+    register unsigned int j;
+    uint8_t quality_char;
+
+    /* print out the name/sequence blocks */
+    fprintf(fp, "@%s\n%s\n+%s\n", name, bases, name);
+
+//    /* print out quality values (as integer) */
+//    for (j = 0; j < nbases; j++) {
+//        printf("%d ", (int) rd.quality[j] );
+//    }
+//    printf("\n");
+
+    /* print out quality values (as characters)
+     * formula taken from http://maq.sourceforge.net/fastq.shtml
+     */
+    for (j = 0; j < nbases; j++) {
+        quality_char = (quality[j] <= 93 ? quality[j] : 93) + 33;
+        fprintf(fp, "%c", (char) quality_char );
+    }
+    fprintf(fp, "\n");
+}
+

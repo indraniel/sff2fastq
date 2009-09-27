@@ -3,6 +3,23 @@
 
 #include <stdint.h>
 
+/*
+   The genome center's (http://genome.wustl.edu) linux image has a corrupted
+   <endian.h> file.  Use the endian.h that comes with this distribution.
+   It fills in the missing pieces found in a normal linux distribution.
+*/
+
+#if defined __GENOME__
+#include "endian.h"
+#elif defined __LINUX__
+#include <endian.h>
+#elif defined __BSD__
+#include <sys/endian.h>
+#elif defined __APPLE__
+#include <sys/endian.h>
+#error Unknown location for endian.h
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
