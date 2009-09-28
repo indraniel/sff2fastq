@@ -2,9 +2,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "sff.h"
 
+/* D E F I N E S *************************************************************/
+#define VERSION "0.01"
+#define PRG_NAME "sff2fastq"
+#define FASTQ_FILENAME_MAX_LENGTH 1024
+#define SFF_FILENAME_MAX_LENGTH 1024
+
 /* P R O T O T Y P E S *******************************************************/
+void help_message(void);
+void version_info(void);
+void process_options(int argc, char *argv[]);
 void process_sff_to_fastq(char *sff_file, char *fastq_file);
 void construct_fastq_entry(FILE *fp,
                            char *name,
@@ -13,21 +23,85 @@ void construct_fastq_entry(FILE *fp,
                            uint32_t nbases);
 
 /* G L O B A L S *************************************************************/
-char prg_version[]  = "0.01";
-char prg_name[] = "sff2fastq";
+char fastq_file[FASTQ_FILENAME_MAX_LENGTH] = { '\0' };
+char sff_file[SFF_FILENAME_MAX_LENGTH] = { '\0' };
 
 /* M A I N *******************************************************************/
 int main(int argc, char *argv[]) {
-    sff_common_header *h;
-    char fastq_file[] = "/tmp/test.fastq";
 
-    printf("sff file : %s\n", argv[1]);
-    process_sff_to_fastq(argv[1], fastq_file);
+    process_options(argc, argv);
+    printf("sff file : %s\n", sff_file);
+    if ( strlen(fastq_file) ) {
+        printf("fastq file : %s\n", fastq_file);
+    }
+    exit(0);
+
+    process_sff_to_fastq(sff_file, fastq_file);
 
     return 0;
 }
 
 /* F U N C T I O N S *********************************************************/
+void help_message() {
+    fprintf(stdout, "Print help message here!\n");
+}
+
+void version_info() {
+    fprintf(stdout, "%s -- version: %s\n", PRG_NAME, VERSION);
+}
+
+void process_options(int argc, char *argv[]) {
+    int c;
+    int index;
+    char *opt_o_value = NULL;
+
+    while( (c = getopt(argc, argv, "hvo:")) != -1 ) {
+        switch(c) {
+            case 'h':
+                help_message();
+                exit(0);
+                break;
+            case 'v':
+                version_info();
+                exit(0);
+                break;
+            case 'o':
+                opt_o_value = optarg;
+                break;
+            case '?':
+                if ( isprint(optopt) )
+                    fprintf(stderr, "Unknown option '-%c'.\n", optopt);
+                else
+                    fprintf(stderr, 
+                            "Unkown option character '\\x%x'.\n",
+                            optopt);
+                exit(1);
+             default:
+                abort();
+        }
+    }
+
+    if ( opt_o_value != NULL ) {
+        strncpy(fastq_file, opt_o_value, FASTQ_FILENAME_MAX_LENGTH);
+    }
+
+    /* process the remaining command line arguments */
+    for (index = optind; index < argc; index++) {
+        strncpy(sff_file, argv[index], SFF_FILENAME_MAX_LENGTH);
+    }
+
+//    /* just take the first passed in non-getopt argument as the sff file */
+//    strncpy(sff_file, argv[optind], SFF_FILENAME_MAX_LENGTH);
+
+    /* ensure that an sff file was at least passed in! */
+    if ( !strlen(sff_file) ) {
+        fprintf(stderr, "%s %s '%s %s' %s\n",
+                "[err] Need to specify an sff file!",
+                "See", PRG_NAME, "-h", "for usage!");
+        exit(1);
+    }
+}
+
 void 
 process_sff_to_fastq(char *sff_file, char *fastq_file) {
     sff_common_header h;
@@ -41,7 +115,7 @@ process_sff_to_fastq(char *sff_file, char *fastq_file) {
     }
 
     read_sff_common_header(sff_fp, &h);
-    verify_sff_common_header(prg_name, prg_version, &h);
+    verify_sff_common_header(PRG_NAME, VERSION, &h);
 
     printf("size of header: %d \n", sizeof(sff_common_header));
     printf("\tmagic        : 0x%x\n" , h.magic);
