@@ -30,11 +30,10 @@ char sff_file[SFF_FILENAME_MAX_LENGTH] = { '\0' };
 int main(int argc, char *argv[]) {
 
     process_options(argc, argv);
-    printf("sff file : %s\n", sff_file);
-    if ( strlen(fastq_file) ) {
-        printf("fastq file : %s\n", fastq_file);
-    }
-    exit(0);
+//    printf("sff file : %s\n", sff_file);
+//    if ( strlen(fastq_file) ) {
+//        printf("fastq file : %s\n", fastq_file);
+//    }
 
     process_sff_to_fastq(sff_file, fastq_file);
 
@@ -43,7 +42,13 @@ int main(int argc, char *argv[]) {
 
 /* F U N C T I O N S *********************************************************/
 void help_message() {
-    fprintf(stdout, "Print help message here!\n");
+    fprintf(stdout, "Usage: %s %s %s\n", PRG_NAME, "<sff_file>", "[options]");
+    fprintf(stdout, "\t%-20s%-20s\n", "-h", "This help message");
+    fprintf(stdout, "\t%-20s%-20s\n", "-v", "Program and version information");
+    fprintf(stdout, "\t%-20s%-20s %s\n",
+                    "-o <fastq_file>",
+                    "Desired fastq output file.",
+                    "If not specified, defaults to stdout");
 }
 
 void version_info() {
@@ -69,12 +74,12 @@ void process_options(int argc, char *argv[]) {
                 opt_o_value = optarg;
                 break;
             case '?':
-                if ( isprint(optopt) )
-                    fprintf(stderr, "Unknown option '-%c'.\n", optopt);
-                else
-                    fprintf(stderr, 
-                            "Unkown option character '\\x%x'.\n",
-                            optopt);
+//                if ( isprint(optopt) )
+//                    fprintf(stderr, "Unknown option '-%c'.\n", optopt);
+//                else
+//                    fprintf(stderr, 
+//                            "Unkown option character '\\x%x'.\n",
+//                            optopt);
                 exit(1);
              default:
                 abort();
@@ -117,25 +122,30 @@ process_sff_to_fastq(char *sff_file, char *fastq_file) {
     read_sff_common_header(sff_fp, &h);
     verify_sff_common_header(PRG_NAME, VERSION, &h);
 
-    printf("size of header: %d \n", sizeof(sff_common_header));
-    printf("\tmagic        : 0x%x\n" , h.magic);
-    printf("\tindex_offset : 0x%llx\n", h.index_offset);
-    printf("\tindex_len    : 0x%x\n" , h.index_len);
-    printf("\tnumreads     : 0x%x\n" , h.nreads);
-    printf("\theader_len   : 0x%x\n" , h.header_len);
-    printf("\tkey_len      : 0x%x\n" , h.key_len);
-    printf("\tflow_len     : 0x%x\n" , h.flow_len);
-    printf("\tflowgram_fmt : 0x%x\n" , h.flowgram_format);
-    printf("\tflow         : %s\n  " , h.flow);
-    printf("\tkey          : %s\n  " , h.key);
-    printf("\n\n");
+//    printf("size of header: %d \n", sizeof(sff_common_header));
+//    printf("\tmagic        : 0x%x\n" , h.magic);
+//    printf("\tindex_offset : 0x%llx\n", h.index_offset);
+//    printf("\tindex_len    : 0x%x\n" , h.index_len);
+//    printf("\tnumreads     : 0x%x\n" , h.nreads);
+//    printf("\theader_len   : 0x%x\n" , h.header_len);
+//    printf("\tkey_len      : 0x%x\n" , h.key_len);
+//    printf("\tflow_len     : 0x%x\n" , h.flow_len);
+//    printf("\tflowgram_fmt : 0x%x\n" , h.flowgram_format);
+//    printf("\tflow         : %s\n  " , h.flow);
+//    printf("\tkey          : %s\n  " , h.key);
+//    printf("\n\n");
 
-    if ( (fastq_fp = fopen(fastq_file, "w")) == NULL ) {
-        fprintf(stderr, "Could not open file '%s' \n", fastq_file);
-        exit(1);
+    if ( !strlen(fastq_file) ) {
+        fastq_fp = stdout;
+    }
+    else {
+        if ( (fastq_fp = fopen(fastq_file, "w")) == NULL ) {
+            fprintf(stderr, "Could not open file '%s' \n", fastq_file);
+            exit(1);
+        }
     }
 
-    printf("Found %d reads to process\n", h.nreads);
+//    printf("Found %d reads to process\n", h.nreads);
 
     char *name;
     char *bases;
@@ -165,7 +175,7 @@ process_sff_to_fastq(char *sff_file, char *fastq_file) {
         memset(name, '\0', (size_t) name_length);
         strncpy(name, rh.name, (size_t) rh.name_len);
 
-        printf("[%d | %d] %s\n", (i+1), numreads, name);
+//        printf("[%d | %d] %s\n", (i+1), numreads, name);
 
         construct_fastq_entry(fastq_fp, name, bases, rd.quality, rh.nbases);
 

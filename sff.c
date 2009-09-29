@@ -63,7 +63,7 @@ read_sff_common_header(FILE *fp, sff_common_header *h) {
                   + (sizeof(char) * h->flow_len)
                   + (sizeof(char) * h->key_len);
 
-    printf("The header size is currently %d bytes\n", header_size);
+//    printf("The header size is currently %d bytes\n", header_size);
 
     if ( !(header_size % PADDING_SIZE == 0) ) {
         read_padding(fp, header_size);
