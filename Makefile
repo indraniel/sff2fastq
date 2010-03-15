@@ -1,6 +1,6 @@
 .PHONY: clean genome
 
-sfff2fastq: main.o sff.o
+sff2fastq: main.o sff.o
 	gcc -g -o sff2fastq main.o sff.o
 
 genome: main.o sff.genome.o
