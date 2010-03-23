@@ -1,0 +1,33 @@
+SYNOPSIS
+========
+
+The program 'sff2fastq' extracts read information from a SFF file,
+produced by the 454 genome sequencer and outputs the sequences and
+quality scores in a FASTQ format.
+
+Below is help message (via 'sff2fastq -h' describing its usage).
+
+Usage: sff2fastq <sff_file> [options]
+        -h                  This help message   
+        -v                  Program and version information
+        -n                  Output the untrimmed sequence
+        -o <fastq_file>     Desired fastq output file. If not specified, 
+                            defaults to stdout
+
+INSTALLATION
+============
+
+The installation process currently consists of a very simple Makefile.
+
+Just do the following:
+
+cd sff2fastq;
+make;
+
+The 'sff2fastq' executable should be in the working directory directory.
+
+
+AUTHOR
+======
+
+Indraniel Das (indraniel@gmail.com)  2010-Mar-23
