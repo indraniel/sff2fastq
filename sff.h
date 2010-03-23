@@ -1,11 +1,29 @@
+/*
+    Copyright (C) 2009, 2010 Indraniel Das <indraniel@gmail.com>
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, see <http://www.gnu.org/licenses/>
+*/
+
 #ifndef _SFF_H_
 #define _SFF_H_
 
 #include <stdint.h>
 
 /*
-   The genome center's (http://genome.wustl.edu) linux image has a corrupted
-   <endian.h> file.  Use the endian.h that comes with this distribution.
+   The Genome Center's (http://genome.wustl.edu) linux image has a corrupted
+   <endian.h> file.  Use the endian.h that comes with this distribution if
+   compiling at the Genome Center at Washington University.
    It fills in the missing pieces found in a normal linux distribution.
 */
 
