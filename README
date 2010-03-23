@@ -22,12 +22,35 @@ The installation process currently consists of a very simple Makefile.
 Just do the following:
 
 cd sff2fastq;
-make;
+make; # try 'make genome' if at the Genome Center at Washington University
 
 The 'sff2fastq' executable should be in the working directory directory.
+Afterwards, you can move the 'sff2fastq' to wherever you wish.
+
+NOTES
+=====
+
+This has been successfully compiled on Linux/Ubuntu 8.04 & 9.10 workstations
+(both 32-bit and 64-bit machines).  Compiling on other type of operating
+systems has not been experimented upon.
 
 
 AUTHOR
 ======
 
-Indraniel Das (indraniel@gmail.com)  2010-Mar-23
+Indraniel Das (indraniel@gmail.com)
+Washington University Genome Center
+
+ACKNOWLEDGEMENTS
+================
+
+This software was developed at the Genome Center at Washington
+Univeristy, St. Louis, MO.
+
+DISCLAIMER
+==========
+
+This software is provided "as is" without warranty of any kind.
+
+
+March 23, 2010
