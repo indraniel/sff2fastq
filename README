@@ -2,7 +2,7 @@ SYNOPSIS
 ========
 
 The program 'sff2fastq' extracts read information from a SFF file,
-produced by the 454 genome sequencer and outputs the sequences and
+produced by the 454 genome sequencer, and outputs the sequences and
 quality scores in a FASTQ format.
 
 Below is help message (via 'sff2fastq -h' describing its usage).
@@ -24,15 +24,15 @@ Just do the following:
 cd sff2fastq;
 make; # try 'make genome' if at the Genome Center at Washington University
 
-The 'sff2fastq' executable should be in the working directory directory.
-Afterwards, you can move the 'sff2fastq' to wherever you wish.
+The 'sff2fastq' executable should be in the working directory.
+Afterwards, you can move the executable to wherever you wish.
 
 NOTES
 =====
 
 This has been successfully compiled on Linux/Ubuntu 8.04 & 9.10 workstations
-(both 32-bit and 64-bit machines).  Compiling on other type of operating
-systems has not been experimented upon.
+(both 32-bit and 64-bit machines).  Compiling on other types of operating
+systems and architectures has not been experimented upon.
 
 
 AUTHOR
@@ -45,7 +45,7 @@ ACKNOWLEDGEMENTS
 ================
 
 This software was developed at the Genome Center at Washington
-Univeristy, St. Louis, MO.
+University, St. Louis, MO.
 
 DISCLAIMER
 ==========
