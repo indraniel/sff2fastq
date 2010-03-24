@@ -3,7 +3,7 @@
 sff2fastq: main.o sff.o
 	gcc -g -o sff2fastq main.o sff.o
 
-genome: main.o sff.genome.o
+genome: main.genome.o sff.genome.o
 	gcc -g -o sff2fastq main.o sff.genome.o
 
 main.o: main.c sff.h
@@ -11,6 +11,9 @@ main.o: main.c sff.h
 
 sff.o: sff.c sff.h
 	gcc -g -I. -c sff.c
+
+main.genome.o: main.c sff.h
+	gcc -D__GENOME__ -g -I. -c main.c
 
 sff.genome.o: sff.c sff.h
 	gcc -D__GENOME__ -g -I. -c sff.c -o sff.genome.o

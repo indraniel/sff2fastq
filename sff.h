@@ -29,14 +29,51 @@
 */
 
 #if defined __GENOME__
-#include "endian.h"
+  #include "endian.h"
 #elif defined __LINUX__
-#include <endian.h>
+  #include <endian.h>
 #elif defined __BSD__
-#include <sys/endian.h>
+  #include <sys/endian.h>
 #elif defined __APPLE__
-#include <sys/endian.h>
-#error Unknown location for endian.h
+  #include <sys/_endian.h>
+  #include <architecture/byte_order.h>
+  #define __bswap_64(x)      NXSwapLongLong(x)
+  #define __bswap_32(x)      NXSwapLong(x)
+  #define __bswap_16(x)      NXSwapShort(x)
+
+  #if __DARWIN_BYTE_ORDER == __DARWIN_BIG_ENDIAN
+    #define htobe16(x) (x)
+    #define htole16(x) __bswap_16 (x)
+    #define be16toh(x) (x)
+    #define le16toh(x) __bswap_16 (x)
+
+    #define htobe32(x) (x)
+    #define htole32(x) __bswap_32 (x)
+    #define be32toh(x) (x)
+    #define le32toh(x) __bswap_32 (x)
+
+    #define htobe64(x) (x)
+    #define htole64(x) __bswap_64 (x)
+    #define be64toh(x) (x)
+    #define le64toh(x) __bswap_64 (x)
+  #else
+    #define htobe16(x) __bswap_16 (x)
+    #define htole16(x) (x)
+    #define be16toh(x) __bswap_16 (x)
+    #define le16toh(x) (x)
+
+    #define htobe32(x) __bswap_32 (x)
+    #define htole32(x) (x)
+    #define be32toh(x) __bswap_32 (x)
+    #define le32toh(x) (x)
+
+    #define htobe64(x) __bswap_64 (x)
+    #define htole64(x) (x)
+    #define be64toh(x) __bswap_64 (x)
+    #define le64toh(x) (x)
+  #endif
+#else
+  #error Unknown location for endian.h
 #endif
 
 #ifdef __cplusplus

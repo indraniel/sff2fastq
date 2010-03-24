@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
 
 /* F U N C T I O N S *********************************************************/
 void help_message() {
-    fprintf(stdout, "Usage: %s %s %s\n", PRG_NAME, "<sff_file>", "[options]");
+    fprintf(stdout, "Usage: %s %s %s\n", PRG_NAME, "[options]", "<sff_file>");
     fprintf(stdout, "\t%-20s%-20s\n", "-h", "This help message");
     fprintf(stdout, "\t%-20s%-20s\n", "-v", "Program and version information");
     fprintf(stdout, "\t%-20s%-20s\n", "-n", "Output the untrimmed sequence and quality scores");

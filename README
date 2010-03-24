@@ -7,7 +7,7 @@ quality scores in a FASTQ format.
 
 Below is help message (via 'sff2fastq -h' describing its usage).
 
-Usage: sff2fastq <sff_file> [options]
+Usage: sff2fastq [options] <sff_file>
         -h                  This help message   
         -v                  Program and version information
         -n                  Output the untrimmed sequence
@@ -31,9 +31,10 @@ Afterwards, you can move the executable to wherever you wish.
 NOTES
 =====
 
-This has been successfully compiled on Linux/Ubuntu 8.04 & 9.10 workstations
-(both 32-bit and 64-bit machines).  Compiling on other types of operating
-systems and architectures has not been experimented upon.
+This has been successfully compiled on Linux/Ubuntu 8.04 & 9.10
+workstations (both 32-bit and 64-bit machines), and on Mac OS X (version
+10.5).  Compiling on other types of operating systems and architectures
+has not been experimented upon.
 
 
 AUTHOR
