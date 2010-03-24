@@ -30,7 +30,7 @@
 
 #if defined __GENOME__
   #include "endian.h"
-#elif defined __LINUX__
+#elif defined __linux__
   #include <endian.h>
 #elif defined __BSD__
   #include <sys/endian.h>
