@@ -26,7 +26,7 @@
 #include "sff.h"
 
 /* D E F I N E S *************************************************************/
-#define VERSION "0.01"
+#define VERSION "0.90"
 #define PRG_NAME "sff2fastq"
 #define FASTQ_FILENAME_MAX_LENGTH 1024
 #define SFF_FILENAME_MAX_LENGTH 1024
