@@ -54,11 +54,6 @@ int  opt_trim  = 1;
 int main(int argc, char *argv[]) {
 
     process_options(argc, argv);
-//    printf("sff file : %s\n", sff_file);
-//    if ( strlen(fastq_file) ) {
-//        printf("fastq file : %s\n", fastq_file);
-//    }
-
     process_sff_to_fastq(sff_file, fastq_file, opt_trim);
 
     return 0;
@@ -105,12 +100,6 @@ process_options(int argc, char *argv[]) {
                 opt_trim = 0;    /* disable trimming -- like 454 tools */
                 break;
             case '?':
-//                if ( isprint(optopt) )
-//                    fprintf(stderr, "Unknown option '-%c'.\n", optopt);
-//                else
-//                    fprintf(stderr, 
-//                            "Unkown option character '\\x%x'.\n",
-//                            optopt);
                 exit(1);
              default:
                 abort();
@@ -179,8 +168,6 @@ process_sff_to_fastq(char *sff_file, char *fastq_file, int trim_flag) {
         }
     }
 
-//    printf("Found %d reads to process\n", h.nreads);
-
     int left_clip = 0, right_clip = 0, nbases = 0;
     char *name;
     char *bases;
@@ -210,8 +197,6 @@ process_sff_to_fastq(char *sff_file, char *fastq_file, int trim_flag) {
         }
         memset(name, '\0', (size_t) name_length);
         strncpy(name, rh.name, (size_t) rh.name_len);
-
-//        printf("[%d | %d] %s\n", (i+1), numreads, name);
 
         construct_fastq_entry(fastq_fp, name, bases, quality, nbases);
 
