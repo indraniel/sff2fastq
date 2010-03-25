@@ -65,7 +65,8 @@ int main(int argc, char *argv[]) {
 }
 
 /* F U N C T I O N S *********************************************************/
-void help_message() {
+void
+help_message() {
     fprintf(stdout, "Usage: %s %s %s\n", PRG_NAME, "[options]", "<sff_file>");
     fprintf(stdout, "\t%-20s%-20s\n", "-h", "This help message");
     fprintf(stdout, "\t%-20s%-20s\n", "-v", "Program and version information");
@@ -76,11 +77,13 @@ void help_message() {
                     "If not specified, defaults to stdout");
 }
 
-void version_info() {
+void
+version_info() {
     fprintf(stdout, "%s -- version: %s\n", PRG_NAME, VERSION);
 }
 
-void process_options(int argc, char *argv[]) {
+void
+process_options(int argc, char *argv[]) {
     int c;
     int index;
     char *opt_o_value = NULL;
@@ -135,7 +138,7 @@ void process_options(int argc, char *argv[]) {
     }
 }
 
-void 
+void
 process_sff_to_fastq(char *sff_file, char *fastq_file, int trim_flag) {
     sff_common_header h;
     sff_read_header rh;
@@ -224,7 +227,8 @@ process_sff_to_fastq(char *sff_file, char *fastq_file, int trim_flag) {
     fclose(sff_fp);
 }
 
-void construct_fastq_entry(FILE *fp,
+void
+construct_fastq_entry(FILE *fp,
                            char *name,
                            char *bases,
                            uint8_t *quality,
@@ -250,4 +254,3 @@ void construct_fastq_entry(FILE *fp,
     }
     fprintf(fp, "\n");
 }
-
