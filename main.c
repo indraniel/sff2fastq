@@ -144,7 +144,7 @@ void process_options(int argc, char *argv[]) {
     /* ensure that an sff file was at least passed in! */
     if ( !strlen(sff_file) ) {
         fprintf(stderr, "%s %s '%s %s' %s\n",
-                "[err] Need to specify an sff file!",
+                "[err] Need to specify a sff file!",
                 "See", PRG_NAME, "-h", "for usage!");
         exit(1);
     }
@@ -158,7 +158,8 @@ process_sff_to_fastq(char *sff_file, char *fastq_file, int trim_flag) {
     FILE *sff_fp, *fastq_fp;
 
     if ( (sff_fp = fopen(sff_file, "r")) == NULL ) {
-        fprintf(stderr, "Could not open file '%s' \n", sff_file);
+        fprintf(stderr,
+                "[err] Could not open file '%s' for reading.\n", sff_file);
         exit(1);
     }
 
@@ -183,7 +184,9 @@ process_sff_to_fastq(char *sff_file, char *fastq_file, int trim_flag) {
     }
     else {
         if ( (fastq_fp = fopen(fastq_file, "w")) == NULL ) {
-            fprintf(stderr, "Could not open file '%s' \n", fastq_file);
+            fprintf(stderr,
+                    "[err] Could not open file '%s' for writing.\n",
+                    fastq_file);
             exit(1);
         }
     }
@@ -214,7 +217,7 @@ process_sff_to_fastq(char *sff_file, char *fastq_file, int trim_flag) {
         int name_length = (int) rh.name_len + 1; // account for NULL termination
         name = (char *) malloc( name_length * sizeof(char) );
         if (!name) {
-            printf("Out of memory! For name string!\n");
+            fprintf(stderr, "Out of memory! For read name string!\n");
             exit(1);
         }
         memset(name, '\0', (size_t) name_length);
@@ -273,7 +276,7 @@ char* get_read_bases(sff_read_data rd,
     // inititalize the bases string/array
     bases = (char *) malloc( bases_length * sizeof(char) );
     if (!bases) {
-        printf("Out of memory! For bases string!\n");
+        fprintf(stderr, "Out of memory! For read bases string!\n");
         exit(1);
     }
     memset(bases, '\0', (size_t) bases_length);
@@ -302,8 +305,7 @@ uint8_t* get_read_quality_values(sff_read_data rd,
     // inititalize the quality array
     quality = (uint8_t *) malloc( quality_length * sizeof(uint8_t) );
     if (!quality) {
-        printf("Out of memory! For quality array!\n");
-        printf("left clip: %d right clip: %d\n", left_clip, right_clip);
+        fprintf(stderr, "Out of memory! For read quality array!\n");
         exit(1);
     }
     memset(quality, '\0', (size_t) quality_length);

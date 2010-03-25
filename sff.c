@@ -52,13 +52,15 @@ read_sff_common_header(FILE *fp, sff_common_header *h) {
     /* finally appropriately allocate and read the flow and key strings */
     flow = (char *) malloc( h->flow_len * sizeof(char) );
     if (!flow) {
-        printf("Out of memory! Could not allocate header flow string!\n");
+        fprintf(stderr,
+                "Out of memory! Could not allocate header flow string!\n");
         exit(1);
     }
 
     key  = (char *) malloc( h->key_len * sizeof(char) );
     if (!key) {
-        printf("Out of memory! Could not allocate header key string!\n");
+        fprintf(stderr,
+                "Out of memory! Could not allocate header key string!\n");
         exit(1);
     }
 
@@ -113,7 +115,7 @@ verify_sff_common_header(char *prg_name,
     /* ensure that the magic file type is valid */
     if (h->magic != SFF_MAGIC) {
         fprintf(stderr, "The SFF header has magic value '%d' \n", h->magic);
-        fprintf(stderr, 
+        fprintf(stderr,
                 "[err] %s (version %s) %s : '%d' \n", 
                 prg_name, 
                 prg_version, 
@@ -132,7 +134,7 @@ verify_sff_common_header(char *prg_name,
             printf("0x%02x ", sff_header_version[i]);
         }
         printf("\n");
-        fprintf(stderr, 
+        fprintf(stderr,
                 "[err] %s (version %s) %s : ", 
                 prg_name, 
                 prg_version, 
@@ -171,7 +173,8 @@ read_sff_read_header(FILE *fp, sff_read_header *rh) {
     /* finally appropriately allocate and read the read_name string */
     name = (char *) malloc( rh->name_len * sizeof(char) );
     if (!name) {
-        printf("Out of memory! Could not allocate header flow string!\n");
+        fprintf(stderr,
+                "Out of memory! Could not allocate header flow string!\n");
         exit(1);
     }
 
@@ -217,25 +220,29 @@ read_sff_read_data(FILE *fp,
     /* allocate the appropriate arrays */
     flowgram   = (uint16_t *) malloc( nflows * sizeof(uint16_t) );
     if (!flowgram) {
-        printf("Out of memory! Could not allocate for a read flowgram!\n");
+        fprintf(stderr,
+                "Out of memory! Could not allocate for a read flowgram!\n");
         exit(1);
     }
 
     flow_index = (uint8_t *) malloc( nbases * sizeof(uint8_t)  );
     if (!flow_index) {
-        printf("Out of memory! Could not allocate for a read flow index!\n");
+        fprintf(stderr,
+                "Out of memory! Could not allocate for a read flow index!\n");
         exit(1);
     }
 
     quality = (uint8_t *) malloc( nbases * sizeof(uint8_t)  );
     if (!quality) {
-        printf("Out of memory! Could not allocate for a read quality string!\n");
+        fprintf(stderr,
+                "Out of memory! Could not allocate for a read quality string!\n");
         exit(1);
     }
 
     bases = (char * ) malloc( nbases * sizeof(char) );
     if (!bases) {
-        printf("Out of memory! Could not allocate for a read base string!\n");
+        fprintf(stderr,
+                "Out of memory! Could not allocate for a read base string!\n");
         exit(1);
     }
 
