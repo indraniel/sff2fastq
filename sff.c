@@ -21,6 +21,7 @@
 /* I N C L U D E S ***********************************************************/
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "sff.h"
 
 /* F U N C T I O N S *********************************************************/
@@ -286,4 +287,91 @@ free_sff_read_data(sff_read_data *d) {
     free(d->flow_index);
     free(d->bases);
     free(d->quality);
+}
+
+/* as described in section 13.3.8.2 "Read Header Section" in the
+   454 Genome Sequencer Data Analysis Software Manual
+   see (http://sequence.otago.ac.nz/download/GS_FLX_Software_Manual.pdf) */
+
+void
+get_clip_values(sff_read_header rh,
+                int trim_flag,
+                int *left_clip,
+                int *right_clip) {
+    if (trim_flag) {
+        (*left_clip)  =
+            (int) max(1, max(rh.clip_qual_left, rh.clip_adapter_left));
+
+        // account for the 1-based index value
+        *left_clip = *left_clip - 1;
+
+        (*right_clip) = (int) min(
+              (rh.clip_qual_right    == 0 ? rh.nbases : rh.clip_qual_right   ),
+              (rh.clip_adapter_right == 0 ? rh.nbases : rh.clip_adapter_right)
+        );
+    }
+    else {
+        (*left_clip)  = 0;
+        (*right_clip) = (int) rh.nbases;
+    }
+}
+
+char*
+get_read_bases(sff_read_data rd,
+               int left_clip,
+               int right_clip) {
+    char *bases;
+
+    // account for NULL termination
+    int bases_length = (right_clip - left_clip) + 1;
+
+    // inititalize the bases string/array
+    bases = (char *) malloc( bases_length * sizeof(char) );
+    if (!bases) {
+        fprintf(stderr, "Out of memory! For read bases string!\n");
+        exit(1);
+    }
+    memset(bases, '\0', (size_t) bases_length);
+
+    // copy the relative substring
+    int start = left_clip;
+    int stop  = right_clip;
+    int i, j = 0;
+
+    for (i = start; i < stop; i++) {
+        *(bases + j) = *(rd.bases + i);
+        j++;
+    }
+
+    return bases;
+}
+
+uint8_t*
+get_read_quality_values(sff_read_data rd,
+                        int left_clip,
+                        int right_clip) {
+    uint8_t *quality;
+
+    // account for NULL termination
+    int quality_length = (right_clip - left_clip) + 1;
+
+    // inititalize the quality array
+    quality = (uint8_t *) malloc( quality_length * sizeof(uint8_t) );
+    if (!quality) {
+        fprintf(stderr, "Out of memory! For read quality array!\n");
+        exit(1);
+    }
+    memset(quality, '\0', (size_t) quality_length);
+
+    // copy the relative substring
+    int start = left_clip;
+    int stop  = right_clip;
+    int i, j = 0;
+
+    for (i = start; i < stop; i++) {
+        *(quality + j) = *(rd.quality + i);
+        j++;
+    }
+
+    return quality;
 }

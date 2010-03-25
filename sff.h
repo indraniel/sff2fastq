@@ -85,6 +85,9 @@ extern "C" {
 #define SFF_VERSION_LENGTH 4
 #define PADDING_SIZE 8
 
+#define min(a,b) ( (a) < (b) ? (a) : (b) )
+#define max(a,b) ( (a) > (b) ? (a) : (b) )
+
 /* This is the overall sff header file */
 
 typedef struct {
@@ -142,6 +145,18 @@ void read_sff_read_data(FILE *fp,
 void free_sff_read_header(sff_read_header *rh);
 void free_sff_read_data(sff_read_data *d);
 
+void get_clip_values(sff_read_header rh,
+                     int trim_flag,
+                     int *left_clip,
+                     int *right_clip);
+
+char* get_read_bases(sff_read_data rd,
+                     int left_clip,
+                     int right_clip);
+
+uint8_t* get_read_quality_values(sff_read_data rd,
+                                int left_clip,
+                                int right_clip);
 
 #ifdef __cplusplus
 }
