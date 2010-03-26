@@ -24,6 +24,7 @@ Just do the following:
 git clone git://github.com/indraniel/sff2fastq.git;
 cd sff2fastq;
 make; # try 'make genome' if at the Genome Center at Washington University
+      # or on a Linux distribution from 2008 or earlier
 
 The 'sff2fastq' executable should be in the working directory.
 Afterwards, you can move the executable to wherever you wish.
@@ -35,6 +36,13 @@ This has been successfully compiled on Linux/Ubuntu 8.04 & 9.10
 workstations (both 32-bit and 64-bit machines), and on Mac OS X (version
 10.5).  Compiling on other types of operating systems and architectures
 has not been experimented upon.
+
+The FASTQ output produced is of the Sanger FASTQ format as described
+here (http://maq.sourceforge.net/fastq.shtml).
+
+Without any given options the default approach is to output trimmed
+sequence and quality values.  This is similar in nature to the sff tools
+produced by 454 Life Sciences/Roche.
 
 AUTHOR
 ======
