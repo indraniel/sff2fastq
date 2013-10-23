@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
 /* F U N C T I O N S *********************************************************/
 void
 help_message() {
-    fprintf(stdout, "Usage: %s %s %s\n", PRG_NAME, "[options]", "<sff_file>");
+    fprintf(stdout, "Usage: %s %s %s\n", PRG_NAME, "[options]", "[sff_file]");
     fprintf(stdout, "\t%-20s%-20s\n", "-h", "This help message");
     fprintf(stdout, "\t%-20s%-20s\n", "-v", "Program and version information");
     fprintf(stdout, "\t%-20s%-20s\n", "-n", "Output the untrimmed sequence and quality scores");
@@ -117,14 +117,6 @@ process_options(int argc, char *argv[]) {
 
 //    /* just take the first passed in non-getopt argument as the sff file */
 //    strncpy(sff_file, argv[optind], SFF_FILENAME_MAX_LENGTH);
-
-    /* ensure that a sff file was at least passed in! */
-    if ( !strlen(sff_file) ) {
-        fprintf(stderr, "%s %s '%s %s' %s\n",
-                "[err] Need to specify a sff file!",
-                "See", PRG_NAME, "-h", "for usage!");
-        exit(1);
-    }
 }
 
 void
@@ -134,7 +126,10 @@ process_sff_to_fastq(char *sff_file, char *fastq_file, int trim_flag) {
     sff_read_data rd;
     FILE *sff_fp, *fastq_fp;
 
-    if ( (sff_fp = fopen(sff_file, "r")) == NULL ) {
+    if ( !strlen(sff_file) ) {
+        sff_fp = stdin;
+    }
+    else if ( (sff_fp = fopen(sff_file, "r")) == NULL ) {
         fprintf(stderr,
                 "[err] Could not open file '%s' for reading.\n", sff_file);
         exit(1);
