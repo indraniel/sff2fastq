@@ -315,10 +315,14 @@ get_read_bases(sff_read_data rd,
 
     // account for NULL termination
     int bases_length = (right_clip - left_clip) + 1;
+    if (bases_length < 1) { 
+        bases = (char *) malloc(1);
+        return bases; 
+    };
 
     // inititalize the bases string/array
     bases = (char *) malloc( bases_length * sizeof(char) );
-    if (!bases) {
+    if (bases == NULL) {
         fprintf(stderr, "Out of memory! For read bases string!\n");
         exit(1);
     }
@@ -345,7 +349,10 @@ get_read_quality_values(sff_read_data rd,
 
     // account for NULL termination
     int quality_length = (right_clip - left_clip) + 1;
-
+    if (quality_length < 1) {
+       quality = (uint8_t *) malloc(1);
+       return quality; 
+    };
     // inititalize the quality array
     quality = (uint8_t *) malloc( quality_length * sizeof(uint8_t) );
     if (!quality) {
