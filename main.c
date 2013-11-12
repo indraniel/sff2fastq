@@ -192,8 +192,10 @@ process_sff_to_fastq(char *sff_file, char *fastq_file, int trim_flag) {
         }
         memset(name, '\0', (size_t) name_length);
         strncpy(name, rh.name, (size_t) rh.name_len);
-
-        construct_fastq_entry(fastq_fp, name, bases, quality, nbases);
+        
+        if (strlen(bases) > 0) { 
+            construct_fastq_entry(fastq_fp, name, bases, quality, nbases);
+        }
 
         free(name);
         free(bases);
