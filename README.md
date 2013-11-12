@@ -75,6 +75,9 @@ The Genome Institute at Washington University
 Contributors
 ------------
 
+* [Björn Winckler](https://github.com/b4winckler)
+* [James Casbon](https://github.com/jamescasbon)
+
 ACKNOWLEDGEMENTS
 ================
 
