@@ -10,7 +10,7 @@ main.o: main.c sff.h
 	gcc -g -I. -c main.c
 
 sff.o: sff.c sff.h
-	gcc -g -I. -c sff.c
+	gcc -D__USE_BSD -g -I. -c sff.c
 
 main.genome.o: main.c sff.h
 	gcc -D__GENOME__ -g -I. -c main.c -o main.genome.o
