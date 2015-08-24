@@ -35,11 +35,11 @@
 #elif defined __BSD__
   #include <sys/endian.h>
 #elif defined __APPLE__
-  #include <sys/_endian.h>
-  #include <architecture/byte_order.h>
-  #define __bswap_64(x)      NXSwapLongLong(x)
-  #define __bswap_32(x)      NXSwapLong(x)
-  #define __bswap_16(x)      NXSwapShort(x)
+  #include <netinet/in.h>
+  #include <libkern/OSByteOrder.h>
+  #define __bswap_64(x)      OSSwapInt64(x)
+  #define __bswap_32(x)      OSSwapInt32(x)
+  #define __bswap_16(x)      OSSwapInt16(x)
 
   #if __DARWIN_BYTE_ORDER == __DARWIN_BIG_ENDIAN
     #define htobe16(x) (x)
